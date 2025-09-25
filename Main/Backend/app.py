@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from municpal_api_request import get_incexp_url_from_user_request, call_municipal_api  
+# from  dataForForecast import
 import requests
 
 app = Flask(__name__)
@@ -15,6 +17,21 @@ MUNICIPALITIES = {
     'EKU': 'Ekurhuleni',
     'ETH': 'eThekwini'
 }
+
+@app.route("/api/query", methods=["POST"])
+def query_municipal_data():
+    data = request.get_json()
+    user_request = data.get("user_request")
+    if not user_request:
+        return jsonify({"error": "user_request missing"}), 400
+    try:
+        # Use all your existing functions here
+        url = get_incexp_url_from_user_request(user_request)
+        response_data = call_municipal_api(url)
+        return jsonify(response_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/municipality-data', methods=['GET'])
 def get_municipality_data():

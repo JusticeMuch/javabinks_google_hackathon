@@ -1,13 +1,21 @@
 import axios from 'axios';
 
-export const fetchMunicipalityData = async (params) => {
+export const fetchMunicipalData = async (userQuery) => {
   try {
-    const response = await axios.get('http://localhost:5000/api/municipality-data', {
-      params
+    const res = await fetch("http://localhost:5000/api/query", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_request: userQuery })
     });
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || { error: error.message };
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Failed to fetch data");
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw err;
   }
 };
 
