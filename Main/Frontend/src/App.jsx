@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import QueryForm from "./components/QueryForm";
 import ResultsTable from "./components/ResultsTable";
+import Forecast from "./components/Forecast";
 import SummaryCard from "./components/SummaryCard";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { fetchMunicipalData } from "./api";
@@ -38,6 +39,11 @@ function App() {
       {error && <div className="alert alert-danger">{error}</div>}
       {data && <SummaryCard total={totalAmount} count={itemCount} queryInfo={queryInfo} />}
       {data && <ResultsTable data={data} />}
+      {data?.cells?.length > 0 && (
+        <div className="mt-4">
+          <Forecast nlData={data.cells} />
+        </div>
+      )}
     </div>
   );
 }
