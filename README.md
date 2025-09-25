@@ -196,12 +196,6 @@ The application integrates with the official Municipal Money API:
 
 ## 🚀 Deployment
 
-### Production Considerations
-- Use production WSGI server (e.g., Gunicorn) instead of Flask dev server
-- Configure environment variables securely
-- Set up proper CORS policies
-- Implement rate limiting for API endpoints
-
 ### Environment Variables
 ```env
 PROJECT_ID=your-gcp-project-id
@@ -234,8 +228,6 @@ For support and questions:
 - [Municipal Money API Documentation](https://municipaldata.treasury.gov.za/api)
 - [Google Vertex AI Documentation](https://cloud.google.com/vertex-ai/docs)
 - [South African National Treasury](http://www.treasury.gov.za/)
-- [React Documentation](https://reactjs.org/)
-- [Flask Documentation](https://flask.palletsprojects.com/)
 
 ---
 
