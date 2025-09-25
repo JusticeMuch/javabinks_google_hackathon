@@ -1,0 +1,35 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.amount-positive {
+  color: #28a745;
+}
+
+.amount-negative {
+  color: #dc3545;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.alert {
+  margin-top: 15px;
+}
