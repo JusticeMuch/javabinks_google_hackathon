@@ -1,5 +1,6 @@
 // Forecast.jsx
 import { useState } from "react";
+import { getForecast as getForecastApi } from "../api";
 
 export default function Forecast({ nlData }) {
   const [forecast, setForecast] = useState([]);
@@ -8,13 +9,8 @@ export default function Forecast({ nlData }) {
   const getForecast = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/forecast", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nl_data: nlData }),
-      });
-      const data = await res.json();
-      setForecast(data.forecast || []);
+      const data = await getForecastApi(nlData);
+      setForecast(data);
     } catch (err) {
       console.error(err);
     } finally {

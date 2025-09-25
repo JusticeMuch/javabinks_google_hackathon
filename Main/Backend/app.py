@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from municpal_api_request import get_incexp_url_from_user_request, call_municipal_api  
-import  dataForForecast
 import requests
 import pandas as pd
 from random import randint

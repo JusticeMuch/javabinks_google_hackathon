@@ -70,41 +70,51 @@ provide code or any other commentary. JUST give the raw JSON array of objects, w
 # --------------------------
 vertexai.init(project=PROJECT_ID, location=REGION)
 
-# --------------------------
-# 5. Generate response from Gemini (GenerativeModel API)
-# --------------------------
-model = GenerativeModel(MODEL_ID)
-try:
+def generate_forecast(prompt_text: str):
+    model = GenerativeModel(MODEL_ID)
+    try:
+        response = model.generate_content(
+            prompt_text,
+            generation_config={"temperature": 0.2, "max_output_tokens": 10000},
+        )
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to call model '{MODEL_ID}' in region '{REGION}'. "
+            "Ensure the Vertex AI API is enabled, your project has access to this model, "
+            "and consider trying 'gemini-2.0-flash' if unavailable."
+        ) from e
+
+    result_text = response.text
+    try:
+        lines = result_text.splitlines()
+        if len(lines) > 2:
+            json_text = "\n".join(lines[1:-1])
+        elif len(lines) == 2:
+            json_text = lines[1]
+        else:
+            json_text = result_text
+        allocation_json = json.loads(json_text)
+        return allocation_json
+    except json.JSONDecodeError:
+        # Return raw text for debugging upstream
+        return {"raw": result_text}
+
+
+if __name__ == "__main__":
+    model = GenerativeModel(MODEL_ID)
     response = model.generate_content(
         prompt,
         generation_config={"temperature": 0.2, "max_output_tokens": 10000},
     )
-except Exception as e:
-    raise RuntimeError(
-        f"Failed to call model '{MODEL_ID}' in region '{REGION}'. "
-        "Ensure the Vertex AI API is enabled, your project has access to this model, "
-        "and consider trying 'gemini-2.0-flash' if unavailable."
-    ) from e
-
-# The model returns text content
-result_text = response.text
-print("Raw model output:\n", result_text)
-
-# --------------------------
-# 6. Parse JSON output
-# --------------------------
-try:
-    lines = result_text.splitlines()
-    if len(lines) > 2:
-        json_text = "\n".join(lines[1:-1])
-    elif len(lines) == 2:
-        json_text = lines[1]
-    else:
-        json_text = result_text
-    allocation_json = json.loads(json_text)
-    print("\nParsed JSON allocation:")
-    for item in allocation_json:
-        print(item)
-except json.JSONDecodeError:
-    print("\nCould not parse JSON. Model output:")
-    print(result_text)
+    result_text = response.text
+    print("Raw model output:\n", result_text)
+    try:
+        lines = result_text.splitlines()
+        json_text = "\n".join(lines[1:-1]) if len(lines) > 2 else (lines[1] if len(lines) == 2 else result_text)
+        allocation_json = json.loads(json_text)
+        print("\nParsed JSON allocation:")
+        for item in allocation_json:
+            print(item)
+    except json.JSONDecodeError:
+        print("\nCould not parse JSON. Model output:")
+        print(result_text)

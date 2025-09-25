@@ -31,11 +31,21 @@ export const fetchAvailableItems = async (municipality, year) => {
 };
 
 export const getForecast = async (nlData) => {
-  const res = await fetch("http://localhost:5000/api/forecast", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nl_data: nlData }),
-  });
-  const data = await res.json();
-  setForecast(data.forecast || []);
+  try {
+    const res = await fetch("http://localhost:5000/api/forecast", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nl_data: nlData }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || "Failed to get forecast");
+    }
+
+    const data = await res.json();
+    return data.forecast || [];
+  } catch (err) {
+    throw err;
+  }
 };
