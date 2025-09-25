@@ -29,3 +29,13 @@ export const fetchAvailableItems = async (municipality, year) => {
     throw error.response?.data || { error: error.message };
   }
 };
+
+export const getForecast = async (nlData) => {
+  const res = await fetch("http://localhost:5000/api/forecast", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nl_data: nlData }),
+  });
+  const data = await res.json();
+  setForecast(data.forecast || []);
+};
