@@ -1,0 +1,19 @@
+.loading {
+    display: none;
+}
+.results-container {
+    display: none;
+}
+.amount-positive {
+    color: #28a745;
+}
+.amount-negative {
+    color: #dc3545;
+}
+.data-card {
+    border-left: 4px solid #007bff;
+}
+.summary-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
