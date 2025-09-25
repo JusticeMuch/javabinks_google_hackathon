@@ -230,6 +230,7 @@ def fetch_item_codes_by_description(description: str):
             "Given the following item codes and their descriptions:\n"
             f"{json.dumps(item_list, ensure_ascii=False)}\n"
             f"Select all item codes relevant to this description: \"{description}\".\n"
+            "Be more exclusive rather than inclusive.\n"
             "Return only a JSON array of codes, no explanation."
         )
         resp_llm = model.generate_content(prompt)
@@ -326,7 +327,7 @@ def call_municipal_api(url: str):
 # Example usage
 # ---------------------
 if __name__ == "__main__":
-    user_req = "Total revenue spent in cape town in 2015"
+    user_req = "Total spent on infrastructure in cape town between 2018 and 2020"
     
     # Generate the URL
     url = get_incexp_url_from_user_request(user_req)
